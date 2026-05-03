@@ -12,7 +12,7 @@ export const Footer = () => {
     return (
         <footer className={`w-full py-6 mt-auto border-t backdrop-blur-sm transition-colors duration-300
             ${isDarkPage
-                ? "bg-transparent border-white/10"
+                ? "bg-slate-950/35 border-white/10"
                 : "bg-white/50 border-slate-100"
             }
         `}>
