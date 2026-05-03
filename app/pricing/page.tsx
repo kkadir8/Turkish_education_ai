@@ -101,7 +101,7 @@ export default function Pricing() {
             
             <div className="mb-8">
               <span className="text-4xl font-bold text-white">₺100</span>
-              <span className="text-slate-500">/tek seferlik ödeme</span>
+              <span className="text-slate-500">/3 aylık</span>
             </div>
 
             <ul className="space-y-4 mb-8 flex-1">
@@ -132,7 +132,7 @@ export default function Pricing() {
                 <span>WhatsApp'tan Satın Al</span>
               </button>
               <p className="text-xs text-center text-slate-500">
-                Ödemeniz sonrası hesabınız 1 iş günü içerisinde Pro'ya yükseltilecektir.
+                Ödemeniz sonrası hesabınız 1 iş günü içinde 3 aylık Pro olarak tanımlanacaktır.
               </p>
             </div>
           </div>

@@ -3,9 +3,19 @@ import bcrypt from 'bcryptjs';
 import { connectToDatabase } from '@/lib/db';
 import User from '@/lib/models/User';
 import { login } from '@/lib/auth';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const rateLimit = checkRateLimit(`auth:login:${ip}`, 8, 10 * 60 * 1000);
+    if (!rateLimit.ok) {
+      return NextResponse.json(
+        { error: 'Çok fazla giriş denemesi. Lütfen birkaç dakika sonra tekrar deneyin.' },
+        { status: 429 }
+      );
+    }
+
     const { email, password } = await request.json();
     const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
@@ -17,16 +27,16 @@ export async function POST(request: Request) {
 
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      return NextResponse.json({ error: 'Kullanıcı bulunamadı.' }, { status: 401 });
+      return NextResponse.json({ error: 'E-posta veya şifre hatalı.' }, { status: 401 });
     }
 
     if (!user.password) {
-      return NextResponse.json({ error: 'Bu hesap için şifre ile giriş aktif değil.' }, { status: 401 });
+      return NextResponse.json({ error: 'E-posta veya şifre hatalı.' }, { status: 401 });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return NextResponse.json({ error: 'Hatalı şifre.' }, { status: 401 });
+      return NextResponse.json({ error: 'E-posta veya şifre hatalı.' }, { status: 401 });
     }
 
     // Create session cookie
