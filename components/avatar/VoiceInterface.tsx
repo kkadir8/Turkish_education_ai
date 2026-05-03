@@ -24,6 +24,9 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
 
     const audioContextRef = useRef<AudioContext | null>(null);
     const audioUnlockedRef = useRef(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const recordedMimeTypeRef = useRef("audio/webm");
+    const recordingStartedAtRef = useRef<number>(0);
 
     const unlockAudio = async () => {
         if (audioUnlockedRef.current) return;
@@ -46,9 +49,30 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
         }
     };
 
+    const checkUsage = async () => {
+        try {
+            const res = await fetch("/api/user/usage", { method: "POST" });
+            if (res.status === 401) {
+                window.location.href = '/login';
+                return false;
+            }
+            if (res.status === 403) {
+                alert("Ücretsiz kullanım hakkınız bitti. Devamı için Pro üyelik gerekmektedir.");
+                window.location.href = '/pricing';
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error("Usage check failed", error);
+            return false;
+        }
+    };
+
     const toggleRecording = async () => {
-        await unlockAudio();
         if (status === "idle") {
+            if (!(await checkUsage())) return;
+            await unlockAudio();
+            setErrorMessage("");
             await startRecording();
         } else if (status === "listening") {
             stopRecording();
@@ -57,11 +81,31 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
 
     const startRecording = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                } 
+            });
             streamRef.current = stream;
-            const mediaRecorder = new MediaRecorder(stream);
+
+            const preferredMimeTypes = [
+                "audio/webm;codecs=opus",
+                "audio/mp4;codecs=mp4a.40.2",
+                "audio/ogg;codecs=opus",
+                "audio/webm",
+                "audio/mp4",
+            ];
+            const mimeType = preferredMimeTypes.find((type) => MediaRecorder.isTypeSupported(type)) ?? "";
+            recordedMimeTypeRef.current = mimeType || "audio/webm";
+
+            const mediaRecorder = mimeType
+                ? new MediaRecorder(stream, { mimeType })
+                : new MediaRecorder(stream);
             mediaRecorderRef.current = mediaRecorder;
             chunksRef.current = [];
+            recordingStartedAtRef.current = Date.now();
 
             mediaRecorder.ondataavailable = (e) => {
                 if (e.data.size > 0) chunksRef.current.push(e.data);
@@ -69,7 +113,23 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
 
             mediaRecorder.onstop = async () => {
                 stream.getTracks().forEach(track => track.stop());
-                const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+                const audioBlob = new Blob(chunksRef.current, { type: mimeType });
+                const recordingDurationMs = Date.now() - recordingStartedAtRef.current;
+                console.log("Audio Blob Size:", audioBlob.size, "bytes");
+                if (audioBlob.size < 1000) {
+                    console.warn("Audio blob is too small, might be silence.");
+                }
+                if (recordingDurationMs < 600) {
+                    setStatus("idle");
+                    setErrorMessage("Kayıt çok kısa oldu. Lütfen en az 1 saniye konuşup tekrar deneyin.");
+                    return;
+                }
+                const hasSpeech = await detectSpeech(audioBlob);
+                if (!hasSpeech) {
+                    setStatus("idle");
+                    setErrorMessage("Ses algılanamadı. Mikrofon seçiminizi kontrol edin (varsayılan cihaz doğru olmayabilir) ve tekrar deneyin.");
+                    return;
+                }
                 await processAudio(audioBlob);
             };
 
@@ -104,17 +164,11 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
 
     const processAudio = async (audioBlob: Blob) => {
         try {
-            const formData = new FormData();
-            formData.append("file", audioBlob, "audio.webm");
-
-            const sttRes = await fetch("/api/speech-to-text", {
-                method: "POST",
-                body: formData,
-            });
-            const sttData = await sttRes.json();
+            const sttData = await transcribeWithRetry(audioBlob, 1);
 
             if (!sttData.text) throw new Error("Transcription failed");
             setTranscript(sttData.text);
+            setErrorMessage("");
 
             const newMessage = { role: "user", content: sttData.text };
             const updatedHistory = [...conversationHistory, newMessage];
@@ -139,6 +193,12 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
 
             if (!ttsRes.ok) {
                 throw new Error(`TTS failed: ${ttsRes.status}`);
+            }
+
+            const ttsProvider = ttsRes.headers.get("x-tts-provider");
+            const fallbackReason = ttsRes.headers.get("x-tts-fallback-reason");
+            if (ttsProvider === "openai-fallback" && fallbackReason === "paid_plan_required") {
+                setErrorMessage("ElevenLabs secilen sesi Free planda API'de acmiyor; gecici olarak varsayilan sese gecildi.");
             }
 
             const audioBlobRes = await ttsRes.blob();
@@ -169,7 +229,78 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
         } catch (error) {
             console.error("Processing error:", error);
             setStatus("idle");
+            if (error instanceof Error && error.message === "NO_VALID_SPEECH") {
+                setErrorMessage("Ses net algılanamadı. Mikrofon seçiminizi kontrol edip daha net konuşarak tekrar deneyin.");
+            } else {
+                setErrorMessage("Ses çözümlenirken sorun oluştu. Lütfen daha net konuşup tekrar deneyin.");
+            }
             setResponse("Bir hata oluştu. Lütfen tekrar deneyin.");
+        }
+    };
+
+    const transcribeWithRetry = async (audioBlob: Blob, retries: number) => {
+        const formData = new FormData();
+        formData.append("file", audioBlob, getAudioFileName(recordedMimeTypeRef.current));
+
+        const sttRes = await fetch("/api/speech-to-text", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (sttRes.ok) {
+            return sttRes.json();
+        }
+
+        const sttErrorData = await sttRes.json().catch(() => ({}));
+        const errorMessage =
+            typeof sttErrorData.error === "string" ? sttErrorData.error : "Transcription request failed";
+
+        if (sttRes.status === 422) {
+            throw new Error("NO_VALID_SPEECH");
+        }
+
+        if (retries > 0 && sttRes.status >= 500) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            return transcribeWithRetry(audioBlob, retries - 1);
+        }
+
+        throw new Error(errorMessage);
+    };
+
+    const getAudioFileName = (mimeType: string) => {
+        if (mimeType.includes("mp4")) return "audio.m4a";
+        if (mimeType.includes("ogg")) return "audio.ogg";
+        return "audio.webm";
+    };
+
+    const detectSpeech = async (audioBlob: Blob) => {
+        if (audioBlob.size < 500) return false;
+        try {
+            const context = audioContextRef.current ?? new AudioContext();
+            if (!audioContextRef.current) {
+                audioContextRef.current = context;
+            }
+            const buffer = await audioBlob.arrayBuffer();
+            const decoded = await context.decodeAudioData(buffer.slice(0));
+            const channelData = decoded.getChannelData(0);
+            const sampleStride = Math.max(1, Math.floor(channelData.length / 15000));
+            let sumSquares = 0;
+            let maxAbs = 0;
+            let count = 0;
+
+            for (let i = 0; i < channelData.length; i += sampleStride) {
+                const sample = channelData[i];
+                sumSquares += sample * sample;
+                maxAbs = Math.max(maxAbs, Math.abs(sample));
+                count++;
+            }
+
+            if (count === 0) return false;
+            const rms = Math.sqrt(sumSquares / count);
+            return rms > 0.004 || maxAbs > 0.02;
+        } catch (error) {
+            console.warn("Speech detection failed, continuing with STT:", error);
+            return true;
         }
     };
 
@@ -353,6 +484,16 @@ export function VoiceInterface({ onStateChange, audioRef }: VoiceInterfaceProps)
                     💬 {Math.floor(conversationHistory.length / 2)} mesaj alışverişi
                 </motion.p>
             )}
+
+            {errorMessage && (
+                <p className="text-red-300/90 text-sm text-center max-w-xs">
+                    {errorMessage}
+                </p>
+            )}
+
+            <p className="text-white/40 text-xs text-center max-w-sm">
+                Ipucu: Ses gelmiyorsa tarayici veya sistemde secili varsayilan mikrofonu kontrol edin.
+            </p>
         </div>
     );
 }

@@ -1,16 +1,13 @@
 import { OpenAI } from "openai";
 import { TURKISH_TEACHER_SYSTEM_PROMPT } from "@/lib/constants";
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
     try {
         const { messages } = await req.json();
+        const apiKey = process.env.OPENAI_API_KEY;
 
         // Check if API Key is missing and return Mock immediately if so
-        if (!process.env.OPENAI_API_KEY) {
+        if (!apiKey) {
             console.warn("API Key missing, using mock.");
             await new Promise(resolve => setTimeout(resolve, 1000));
             return Response.json({
@@ -20,6 +17,8 @@ export async function POST(req: Request) {
                 }
             });
         }
+
+        const openai = new OpenAI({ apiKey });
 
         try {
             const completion = await openai.chat.completions.create({

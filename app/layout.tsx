@@ -7,20 +7,24 @@ import { Footer } from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
+import { getSession } from '@/lib/auth';
+
 export const metadata: Metadata = {
   title: "Yabancılara Türkçe Öğretimi",
   description: "Yapay Zeka Destekli Türkçe Öğrenme Platformu",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+
   return (
     <html lang="tr">
       <body suppressHydrationWarning={true} className={`${inter.variable} ${outfit.variable} font-sans bg-gray-50 text-gray-900`}>
-        <Navbar />
+        <Navbar session={session} />
         <main className="min-h-screen flex flex-col">
           <div className="flex-grow">
             {children}

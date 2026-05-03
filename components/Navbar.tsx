@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, Mic, Home, Sparkles, Menu, X } from "lucide-react";
+import { BookOpen, Mic, Home, Sparkles, Menu, X, Languages } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function Navbar() {
+import { User } from "lucide-react";
+
+export function Navbar({ session }: { session: any }) {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -18,7 +20,13 @@ export function Navbar() {
         { name: "Ana Sayfa", href: "/", icon: Home },
         { name: "Yazılı Eğitim", href: "/yazili-egitim", icon: BookOpen },
         { name: "Sesli Eğitim (Avatar)", href: "/sesli-egitim", icon: Mic },
+        { name: "Zemberek", href: "https://zemberek-api-wlrl.onrender.com", icon: Sparkles },
+        { name: "Fiyatlandırma", href: "/pricing", icon: Sparkles }, // Pricing eklendi
     ];
+
+    if (session?.role === 'admin') {
+        navItems.push({ name: "Admin", href: "/admin", icon: User });
+    }
 
     return (
         <nav className={`
@@ -88,10 +96,34 @@ export function Navbar() {
                                 </Link>
                             );
                         })}
+
+                        {/* User Profile / Auth */}
+                        <div className="ml-4 pl-4 border-l border-slate-300/30 flex items-center gap-3">
+                            {session ? (
+                                <Link href="/profile" className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isDarkPage ? 'border-white/20 text-white hover:bg-white/10' : 'border-teal-200 text-teal-800 hover:bg-teal-50'}`}>
+                                    <User className="w-4 h-4" />
+                                    <span className="text-sm font-semibold">{session.name.split(' ')[0]}</span>
+                                    {session.plan === 'pro' && <span className="ml-1 text-[10px] bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded font-bold uppercase">Pro</span>}
+                                </Link>
+                            ) : (
+                                <Link href="/login" className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${isDarkPage ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900' : 'bg-teal-600 hover:bg-teal-700 text-white shadow-md'}`}>
+                                    Giriş Yap
+                                </Link>
+                            )}
+                        </div>
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden">
+                    <div className="md:hidden flex items-center gap-3">
+                        {session ? (
+                            <Link href="/profile" className={`p-1.5 rounded-full border ${isDarkPage ? 'border-white/20 text-white' : 'border-teal-200 text-teal-700'}`}>
+                                <User className="w-5 h-5" />
+                            </Link>
+                        ) : (
+                            <Link href="/login" className={`text-sm font-semibold ${isDarkPage ? 'text-cyan-400' : 'text-teal-600'}`}>
+                                Giriş
+                            </Link>
+                        )}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className={`

@@ -1,0 +1,133 @@
+
+> temp-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.106:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 1369ms
+ GET / 200 in 2.4s (compile: 1708ms, render: 723ms)
+ GET / 200 in 2.3s (compile: 1839ms, render: 470ms)
+ GET / 200 in 240ms (compile: 22ms, render: 219ms)
+ GET / 200 in 158ms (compile: 36ms, render: 122ms)
+ GET /yazili-egitim 200 in 137ms (compile: 81ms, render: 55ms)
+ POST /api/user/usage 200 in 1931ms (compile: 397ms, render: 1534ms)
+ POST /api/chat 200 in 2.7s (compile: 84ms, render: 2.6s)
+ POST /api/user/usage 200 in 417ms (compile: 9ms, render: 408ms)
+ POST /api/chat 200 in 1062ms (compile: 6ms, render: 1056ms)
+ POST /api/user/usage 200 in 136ms (compile: 16ms, render: 120ms)
+ POST /api/chat 200 in 2.2s (compile: 4ms, render: 2.2s)
+ GET /sesli-egitim 200 in 111ms (compile: 80ms, render: 31ms)
+ POST /api/user/usage 200 in 135ms (compile: 5ms, render: 130ms)
+ POST /api/speech-to-text 200 in 1070ms (compile: 111ms, render: 959ms)
+ POST /api/voice-chat 200 in 998ms (compile: 86ms, render: 912ms)
+ POST /api/text-to-speech 200 in 2.3s (compile: 586ms, render: 1716ms)
+ POST /api/user/usage 200 in 193ms (compile: 20ms, render: 173ms)
+ POST /api/speech-to-text 200 in 1139ms (compile: 10ms, render: 1129ms)
+ POST /api/voice-chat 200 in 1030ms (compile: 3ms, render: 1027ms)
+ POST /api/text-to-speech 200 in 3.1s (compile: 3ms, render: 3.1s)
+ GET /sesli-egitim 200 in 442ms (compile: 25ms, render: 417ms)
+ GET /sesli-egitim 200 in 159ms (compile: 30ms, render: 129ms)
+ GET /sesli-egitim 200 in 98ms (compile: 8ms, render: 90ms)
+ POST /api/user/usage 200 in 163ms (compile: 11ms, render: 152ms)
+Transcript: Altyazı M.K.
+ POST /api/speech-to-text 200 in 1420ms (compile: 143ms, render: 1277ms)
+Voice Chat Messages: [ { role: 'user', content: 'Altyazı M.K.' } ]
+AI Response: "Altyazı" demek sinema ve dizi dünyasında çok önemli. Genellikle filmlerin veya dizilerin anadil dışındaki dillerdeki çevirileri için kullanılır. Sen altyazılı film izlemeyi sever misin? Hangi filmi izledin en son?
+ POST /api/voice-chat 200 in 1457ms (compile: 166ms, render: 1291ms)
+ POST /api/text-to-speech 200 in 4.4s (compile: 10ms, render: 4.4s)
+ GET / 200 in 74ms (compile: 21ms, render: 53ms)
+ GET / 200 in 157ms (compile: 7ms, render: 150ms)
+ GET /sesli-egitim 200 in 35ms (compile: 9ms, render: 26ms)
+ POST /api/user/usage 200 in 154ms (compile: 8ms, render: 147ms)
+Transcript: Altyazı M.K.
+ POST /api/speech-to-text 200 in 646ms (compile: 8ms, render: 637ms)
+Voice Chat Messages: [ { role: 'user', content: 'Altyazı M.K.' } ]
+AI Response: Altyazı mı izliyorsun? Hangi filmi ya da diziyi izliyorsun?
+ POST /api/voice-chat 200 in 713ms (compile: 14ms, render: 699ms)
+ POST /api/text-to-speech 200 in 1868ms (compile: 5ms, render: 1862ms)
+ GET /sesli-egitim 200 in 127ms (compile: 13ms, render: 114ms)
+✓ Compiled in 742ms
+ GET / 200 in 117ms (compile: 30ms, render: 88ms)
+ GET / 200 in 139ms (compile: 12ms, render: 127ms)
+ GET /sesli-egitim 200 in 187ms (compile: 129ms, render: 58ms)
+ POST /api/user/usage 200 in 481ms (compile: 11ms, render: 470ms)
+Transcript: Altyazı M.K.
+ POST /api/speech-to-text 200 in 1750ms (compile: 4ms, render: 1747ms)
+Voice Chat Messages: [ { role: 'user', content: 'Altyazı M.K.' } ]
+AI Response: Altyazı izlerken filmin veya dizinin keyfi daha da artıyor. Hangi türde bir film izlemeyi seviyorsun?
+ POST /api/voice-chat 200 in 2.2s (compile: 3ms, render: 2.2s)
+ POST /api/text-to-speech 200 in 2.6s (compile: 4ms, render: 2.6s)
+ GET / 200 in 127ms (compile: 13ms, render: 114ms)
+ GET /sesli-egitim 200 in 43ms (compile: 12ms, render: 31ms)
+ POST /api/user/usage 200 in 150ms (compile: 5ms, render: 145ms)
+Transcript: Altyazı M.K.
+ POST /api/speech-to-text 200 in 888ms (compile: 8ms, render: 880ms)
+Voice Chat Messages: [ { role: 'user', content: 'Altyazı M.K.' } ]
+AI Response: "Altyazı" hakkında ne konuşalım? Filmler veya diziler için altyazı kullanıyor musun? Hangi türleri seviyorsun?
+ POST /api/voice-chat 200 in 62s (compile: 5ms, render: 62s)
+ POST /api/text-to-speech 200 in 1981ms (compile: 8ms, render: 1974ms)
+✓ Compiled in 3.5s
+✓ Compiled in 106ms
+✓ Compiled in 112ms
+ GET / 200 in 101ms (compile: 35ms, render: 66ms)
+ GET / 200 in 114ms (compile: 10ms, render: 105ms)
+ GET /sesli-egitim 200 in 146ms (compile: 108ms, render: 38ms)
+ POST /api/user/usage 200 in 615ms (compile: 12ms, render: 602ms)
+ POST /api/user/usage 200 in 133ms (compile: 5ms, render: 128ms)
+ POST /api/user/usage 200 in 128ms (compile: 6ms, render: 122ms)
+✓ Compiled in 151ms
+ GET /sesli-egitim 200 in 1436ms (compile: 183ms, render: 1252ms)
+ POST /api/user/usage 200 in 1250ms (compile: 8ms, render: 1242ms)
+ POST /api/user/usage 200 in 200ms (compile: 18ms, render: 182ms)
+ GET / 200 in 66ms (compile: 14ms, render: 52ms)
+ GET / 200 in 147ms (compile: 22ms, render: 126ms)
+ GET /sesli-egitim 200 in 43ms (compile: 8ms, render: 34ms)
+ POST /api/user/usage 200 in 170ms (compile: 18ms, render: 152ms)
+ POST /api/user/usage 200 in 137ms (compile: 7ms, render: 130ms)
+ POST /api/user/usage 200 in 133ms (compile: 9ms, render: 124ms)
+Transcript: Ses deneme 1-2-3 Merhaba
+ POST /api/speech-to-text 200 in 2.7s (compile: 108ms, render: 2.6s)
+Voice Chat Messages: [ { role: 'user', content: 'Ses deneme 1-2-3 Merhaba' } ]
+AI Response: Merhaba! Sesini duymak güzel. Bugün nasılsın? Neler yaptın?
+ POST /api/voice-chat 200 in 1635ms (compile: 3ms, render: 1633ms)
+ POST /api/text-to-speech 200 in 2.2s (compile: 10ms, render: 2.2s)
+ POST /api/user/usage 200 in 157ms (compile: 7ms, render: 150ms)
+Transcript: İyiyim. Türkçe öğrenmek istiyorum.
+ POST /api/speech-to-text 200 in 1310ms (compile: 4ms, render: 1306ms)
+Voice Chat Messages: [
+  { role: 'user', content: 'Ses deneme 1-2-3 Merhaba' },
+  {
+    role: 'assistant',
+    content: 'Merhaba! Sesini duymak güzel. Bugün nasılsın? Neler yaptın?'
+  },
+  { role: 'user', content: 'İyiyim. Türkçe öğrenmek istiyorum.' }
+]
+AI Response: Harika! Türkçe öğrenmek çok eğlenceli. Hangi konularda Türkçe öğrenmek istersin? Günlük konuşmalar mı, yoksa yazılı metinler mi?
+ POST /api/voice-chat 200 in 1548ms (compile: 3ms, render: 1544ms)
+ POST /api/text-to-speech 200 in 3.5s (compile: 5ms, render: 3.5s)
+ GET /pricing 200 in 173ms (compile: 129ms, render: 44ms)
+ GET /api/auth/me 200 in 126ms (compile: 57ms, render: 70ms)
+ GET /api/auth/me 200 in 86ms (compile: 3ms, render: 84ms)
+ GET /admin 200 in 79ms (compile: 52ms, render: 27ms)
+ GET /api/auth/me 200 in 69ms (compile: 3ms, render: 67ms)
+ GET /api/auth/me 200 in 63ms (compile: 4ms, render: 59ms)
+ GET /api/admin/users 200 in 558ms (compile: 48ms, render: 510ms)
+ GET /api/admin/users 200 in 61ms (compile: 2ms, render: 59ms)
+ GET /sesli-egitim 200 in 31ms (compile: 11ms, render: 20ms)
+ POST /api/user/usage 200 in 142ms (compile: 9ms, render: 133ms)
+Transcript: Merhaba, nasılsın?
+ POST /api/speech-to-text 200 in 1297ms (compile: 7ms, render: 1290ms)
+Voice Chat Messages: [ { role: 'user', content: 'Merhaba, nasılsın?' } ]
+AI Response: Merhaba! Ben de iyiyim, teşekkür ederim. Sen nasılsın, bugün neler yaptın?
+ POST /api/voice-chat 200 in 1910ms (compile: 7ms, render: 1903ms)
+ POST /api/text-to-speech 200 in 2.1s (compile: 5ms, render: 2.1s)
+✓ Compiled in 151ms
+  Reload env: .env.local
+✓ Compiled in 575ms
+ GET / 200 in 767ms (compile: 697ms, render: 71ms)
+ GET / 200 in 753ms (compile: 470ms, render: 283ms)
+ GET /sesli-egitim 200 in 758ms (compile: 643ms, render: 115ms)

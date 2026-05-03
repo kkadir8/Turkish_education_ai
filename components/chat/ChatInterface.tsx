@@ -40,8 +40,29 @@ export function ChatInterface() {
         scrollToBottom();
     }, [messages]);
 
+    const checkUsage = async () => {
+        try {
+            const res = await fetch("/api/user/usage", { method: "POST" });
+            if (res.status === 401) {
+                window.location.href = '/login';
+                return false;
+            }
+            if (res.status === 403) {
+                alert("Ücretsiz kullanım hakkınız bitti. Devamı için Pro üyelik gerekmektedir.");
+                window.location.href = '/pricing';
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error("Usage check failed", error);
+            return false;
+        }
+    };
+
     // Start Image Description Mode
     const startImageDescriptionMode = async () => {
+        if (!(await checkUsage())) return;
+
         const image = getRandomScenarioImage();
         setSelectedImage(image);
         setMode("image-description");
@@ -76,6 +97,8 @@ export function ChatInterface() {
             startImageDescriptionMode();
             return;
         }
+
+        if (!(await checkUsage())) return;
 
         setIsLoading(true);
         const prompts: Record<string, string> = {
@@ -116,6 +139,8 @@ export function ChatInterface() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
+
+        if (!(await checkUsage())) return;
 
         const userMessage: Message = { role: "user", content: input };
         setMessages((prev) => [...prev, userMessage]);
