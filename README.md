@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Yabancılara Türkçe Öğretimi - AI SaaS Platformu 🇹🇷🤖
 
-## Getting Started
+Bu proje, yabancılara Türkçe öğretmek amacıyla geliştirilmiş, yapay zeka (OpenAI) ve Doğal Dil İşleme (Zemberek NLP) teknolojileriyle güçlendirilmiş kapsamlı bir SaaS (Hizmet Olarak Yazılım) platformudur.
 
-First, run the development server:
+## 👨‍💻 Geliştirici Ekip
+- **Geliştirici (Software Engineer):** [Kadir Gedik](https://github.com/kadirgedik) - Web sitesinin oluşturulması, veritabanı mimarisi, AI entegrasyonları, deployment süreci ve tüm SaaS mimarisinin uçtan uca kodlanması.
+- **Proje Fikri ve NLP Backend:** Arş. Gör. Kerim Gedik - Projenin ana fikrinin oluşturulması ve platformun arkasında çalışan Zemberek NLP API altyapısının geliştirilmesi.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Özellikler
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. Kapsamlı Üyelik ve Limit Sistemi
+- **Rol Bazlı Erişim:** Kullanıcı ve Yönetici (Admin) rolleri.
+- **Güvenli Kimlik Doğrulama:** JWT (JSON Web Token), Bcryptjs hashleme ve HttpOnly çerezler.
+- **SaaS Planları (Free & Pro):**
+  - **Free:** Zemberek araçlarına sınırsız erişim, Yapay Zeka eğitim modüllerine 2 kullanım hakkı.
+  - **Pro:** Tüm eğitim modüllerine sınırsız erişim.
+- **Admin Paneli:** Yöneticinin kullanıcı yetkilerini ve abonelik durumlarını (Free -> Pro) değiştirebileceği özel panel.
+- **WhatsApp Entegrasyonu:** Fiyatlandırma sayfasından direkt WhatsApp üzerinden tek tıkla ön sipariş ve ödeme talebi oluşturma.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Eğitim Modülleri
+- **Yazılı Eğitim (Kâtip Çelebi):** GPT-4o-mini destekli sanal Türkçe öğretmeni. Öğrencinin seviyesine (B1) uygun, motive edici ve düzeltici (recasting) konuşmalar yapar. Resim anlatma, günlük yazma gibi senaryolar içerir.
+- **Sesli Eğitim (Avatar):** 3D Robot avatarı eşliğinde sesli Türkçe pratiği. Whisper (STT) ile sesi metne, GPT-4o-mini ile anlama ve TTS-1 ile tekrar sese dönüştürme döngüsünü milisaniyeler içinde gerçekleştirir.
+- **Zemberek Analizleri:** Kelime kökü/gövdesi bulma, heceleme, cümlenin ögelerini bulma ve yazım yanlışı denetimi.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌐 Canlı Yayın (Live Demo)
+Platformumuz tamamen yayındadır ve kullanıma açıktır. Kaynak kodlarımız kapalı kaynak (closed-source) olarak korunmaktadır. 
 
-## Learn More
+Projeyi hemen incelemek ve test etmek için:
+👉 **[kerimgedik.tech](https://kerimgedik.tech)**
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠 Teknoloji Yığını
+- **Frontend & Backend Framework:** Next.js (App Router, Server Actions)
+- **Veritabanı:** MongoDB Atlas & Mongoose
+- **Stil & UI:** Tailwind CSS, Framer Motion (Animasyonlar), Lucide Icons, Glassmorphism UI
+- **Yapay Zeka:** OpenAI API (GPT-4o-mini, Whisper)
+- **Ses Sentezi (TTS):** ElevenLabs Entegrasyonu (Doğal ve akıcı insan sesi üretimi)
+- **Kimlik Doğrulama:** Jose (JWT), Bcryptjs
